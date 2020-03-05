@@ -108,21 +108,41 @@ function setup_checkboxes() {
    
 }
 
-function respond_to_checkbox_events(e) {
+const date_and_time_object = {
+    'all':0,
+    'js-frameworks':1,
+    'express':1,
+    'js-libs':2,
+    'node':2,
+    'build-tools':3,
+    'npm':4,
+};
 
-    //update map
+const date_and_time_array = [
+    false,
+    false,
+    false,
+    false,
+    false,
+];
+
+function respond_to_checkbox_events(e) {
 
     const activities = document.getElementsByClassName('activities')[0];
     const checkboxes = activities.getElementsByTagName('input');
 
+    date_and_time_array[date_and_time_object[e.target.name]] = 
+     e.target.checked;
+
     let cost_display = activities.getElementsByTagName('h1')[0];
-
     if ( cost_display !== undefined ) activities.removeChild(cost_display);
-
     cost = 0;
     
     for(let i = 0;i < checkboxes.length;i++) {
-        //set checkbox disabled
+        
+        if (!checkboxes[i].checked) checkboxes[i].disabled =
+         date_and_time_array[date_and_time_object[checkboxes[i].name]];
+
         if ( checkboxes[i].checked ) 
          cost += parseInt(checkboxes[i].getAttribute('data-cost'));
     }
