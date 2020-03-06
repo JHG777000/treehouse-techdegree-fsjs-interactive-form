@@ -12,6 +12,7 @@ let cost = 0;
 hide_other_title();
 hide_t_shirt_info();
 setup_checkboxes();
+hide_payment_info();
 
 function hide_other_title() {
     const title = document.getElementById('title');
@@ -155,3 +156,34 @@ function respond_to_checkbox_events(e) {
     }
 }
 
+function hide_payment_info() {
+    const payment = document.getElementById('payment');
+    payment.addEventListener('change',show_payment_info);
+
+    const select_method = payment.getElementsByTagName('option')[0];
+    select_method.disabled = true;
+
+    const paypal = document.getElementById('paypal');
+    paypal.hidden = true;
+
+    const bitcoin = document.getElementById('bitcoin');
+    bitcoin.hidden = true;
+}
+
+function show_payment_info(e) {
+
+    const credit_card = document.getElementById('credit-card');
+    credit_card.hidden = true;
+
+    const paypal = document.getElementById('paypal');
+    paypal.hidden = true;
+
+    const bitcoin = document.getElementById('bitcoin');
+    bitcoin.hidden = true;
+
+    if (e.target.value === 'credit card') credit_card.hidden = false;
+
+    if (e.target.value === 'paypal') paypal.hidden = false;
+
+    if (e.target.value === 'bitcoin') bitcoin.hidden = false;
+}
