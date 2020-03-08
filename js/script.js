@@ -193,11 +193,14 @@ function show_payment_info(e) {
 
     if (validate_email() === false) is_valid = false;
 
+    if (validate_checkboxes() === false) is_valid = false;
+
     return is_valid;
  }
 
  function display_text_in_label(text,color,id) {
     let label = document.getElementsByTagName('label')[id];
+    if (id === 2) label = document.getElementsByTagName('legend')[id];
     label.textContent = text;
     label.style.color = color;
  }
@@ -263,4 +266,28 @@ function show_payment_info(e) {
         email.style.color = 'black';
      }
      return true; 
+ }
+
+ function validate_checkboxes() {
+    for(let i = 0;i < date_and_time_array.length;i++) {
+        if (date_and_time_array[i]) {
+            display_text_in_label('Register for Activities','black',2);
+            return true;
+        }
+    }
+    display_text_in_label('Must Register for Activities!','red',2);
+    return false;
+ }
+
+ function validate_credit_card() {
+
+    const credit_card = document.getElementById('credit-card');
+
+    if (credit_card.hidden) return true;
+
+    if (!credit_card.hidden)  {
+
+    } 
+    
+    return true;
  }
