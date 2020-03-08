@@ -3,8 +3,6 @@ Treehouse Techdegree:
 FSJS project 3 - Interactive Form
 ******************************************/
 
-//document.getElementById("name").focus();
-
 const options_array = [];
 let tshirt_design_state = '';
 let cost = 0;
@@ -187,3 +185,37 @@ function show_payment_info(e) {
 
     if (e.target.value === 'bitcoin') bitcoin.hidden = false;
 }
+
+ function validate_form() {
+    let is_valid = true;
+
+    is_valid = validate_name();
+
+    return is_valid;
+ }
+
+ function display_text_in_label(text,color,id) {
+    let label = document.getElementsByTagName('label')[id];
+    label.textContent = text;
+    label.style.color = color;
+ }
+
+ const name = document.getElementById('name')
+  .addEventListener('keyup',validate_name);
+
+ function validate_name() {
+    let is_valid = true;
+
+    const name = document.getElementById('name');
+
+     if (name.value.length === 0 || !/[a-zA-Z\d]+/.test(name.value)) {
+        display_text_in_label('Name has not been provided!','red',0);
+        name.style.color = 'red';
+        is_valid = false;
+     } else {
+        display_text_in_label('Name:','black',0);
+        name.style.color = 'black';
+     }
+
+    return is_valid; 
+ }
