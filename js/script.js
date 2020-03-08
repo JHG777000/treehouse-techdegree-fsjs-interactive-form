@@ -152,6 +152,8 @@ function respond_to_checkbox_events(e) {
 
      activities.appendChild(cost_display);
     }
+
+    validate_checkboxes(false);
 }
 
 function hide_payment_info() {
@@ -193,7 +195,9 @@ function show_payment_info(e) {
 
     if (validate_email() === false) is_valid = false;
 
-    if (validate_checkboxes() === false) is_valid = false;
+    if (validate_checkboxes(true) === false) is_valid = false;
+
+    if (validate_credit_card() === false) is_valid = false;
 
     return is_valid;
  }
@@ -268,26 +272,118 @@ function show_payment_info(e) {
      return true; 
  }
 
- function validate_checkboxes() {
+ function validate_checkboxes(show_error) {
     for(let i = 0;i < date_and_time_array.length;i++) {
         if (date_and_time_array[i]) {
-            display_text_in_label('Register for Activities','black',2);
+            display_text_in_label('Register for Activities','',2);
             return true;
         }
     }
-    display_text_in_label('Must Register for Activities!','red',2);
-    return false;
+    if (show_error) {
+     display_text_in_label('Must Register for Activities!','red',2);
+     return false;
+    }
  }
 
+ document.getElementById('cc-num').addEventListener('keyup',validate_credit_card_number);
+ document.getElementById('zip').addEventListener('keyup',validate_zip_code);
+ document.getElementById('cvv').addEventListener('keyup',validate_ccv);
+
  function validate_credit_card() {
+    let is_valid = true;
+
+    if (validate_credit_card_number() === false) is_valid = false;
+
+    if (validate_zip_code() === false) is_valid = false;
+
+    if (validate_ccv() === false) is_valid = false;
+
+    return is_valid;
+ }
+
+ function validate_credit_card_number() {
 
     const credit_card = document.getElementById('credit-card');
 
     if (credit_card.hidden) return true;
 
-    if (!credit_card.hidden)  {
+    const cc_num = document.getElementById('cc-num');
 
-    } 
-    
+    if (cc_num.value.length === 0) {
+        display_text_in_label('Card Number has not been provided!','red',14);
+        cc_num.style.color = 'red';
+        return false;
+     } else {
+        display_text_in_label('Card Number:','black',14);
+        cc_num.style.color = 'black';
+     }
+
+     if (!/^\d{13,16}$/.test(cc_num.value)) {
+        display_text_in_label('Card Number is not between 13 and 16 digits!','red',14);
+        cc_num.style.color = 'red';
+        return false;
+     } else {
+        display_text_in_label('Card Number:','black',14);
+        cc_num.style.color = 'black';
+     }
+
+    return true;
+ }
+
+ function validate_zip_code() {
+
+    const credit_card = document.getElementById('credit-card');
+
+    if (credit_card.hidden) return true;
+
+    const zip = document.getElementById('zip');
+
+    if (zip.value.length === 0) {
+        display_text_in_label('Zip Code has not been provided!','red',15);
+        zip.style.color = 'red';
+        return false;
+     } else {
+        display_text_in_label('Zip Code:','black',15);
+        zip.style.color = 'black';
+     }
+
+     if (!/^\d{5}$/.test(zip.value)) {
+        display_text_in_label('Zip Code is not 5 digits!','red',15);
+        zip.style.color = 'red';
+        return false;
+     } else {
+        display_text_in_label('Zip Code:','black',15);
+        zip.style.color = 'black';
+     }
+     
+    return true;
+ }
+
+ function validate_ccv() {
+
+    const credit_card = document.getElementById('credit-card');
+
+    if (credit_card.hidden) return true;
+
+    const cvv = document.getElementById('cvv');
+
+    if (cvv.value.length === 0) {
+        display_text_in_label('CVV has not been provided!','red',16);
+        cvv.style.color = 'red';
+        return false;
+     } else {
+        display_text_in_label('CVV:','black',16);
+        cvv.style.color = 'black';
+     }
+
+     if (!/^\d{3}$/.test(cvv.value)) {
+        display_text_in_label('CVV is not 3 digits!','red',16);
+        cvv.style.color = 'red';
+        return false;
+     } else {
+        display_text_in_label('CVV:','black',16);
+        cvv.style.color = 'black';
+     }
+     
     return true;
  }
