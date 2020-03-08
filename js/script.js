@@ -3,24 +3,26 @@ Treehouse Techdegree:
 FSJS project 3 - Interactive Form
 ******************************************/
 
-const options_array = [];
-let tshirt_design_state = '';
-let cost = 0;
+//Global state
+const options_array = []; //saves color options, so they can reappear as needed
+let tshirt_design_state = ''; //stores tshirt design state, uesd to determine which colors to display
 
-hide_other_title();
-hide_t_shirt_info();
-setup_checkboxes();
-hide_payment_info();
+hide_other_title(); //hide 'other-title' for Job Role
+hide_t_shirt_info(); //hide tshirt colors, until a design is chosen
+setup_checkboxes(); //setup checkboxes for 'Register for Activities'
+hide_payment_info(); //hide payment methods, credit card is default
 
 function hide_other_title() {
   const title = document.getElementById('title');
+  //add event listener to Job menu, so show_other_title can unhide other-title' for Job Role
   title.addEventListener('change', show_other_title);
   const input = document.getElementById('other-title');
-  input.hidden = true;
+  input.hidden = true; //hide 'other-title' for Job Role
 }
 
 function show_other_title(e) {
   if (e.target.value === 'other') {
+    //if 'other' is selected on Job menu, unhide
     const input = document.getElementById('other-title');
     input.hidden = false;
   } else {
@@ -28,7 +30,7 @@ function show_other_title(e) {
     input.hidden = true;
   }
 }
-
+//hide colors menu, by default
 let colors = document.getElementById('colors-js-puns');
 colors.hidden = true;
 
@@ -37,11 +39,11 @@ function hide_t_shirt_info() {
   const options = tshirt.getElementsByTagName('option');
 
   for (let i = 0; i < options.length; i++) {
-    options_array.push(options[i]);
+    options_array.push(options[i]); //add option to options_array, so it can be restored
   }
 
   for (let i = 0; i < options_array.length; i++) {
-    options_array[i].remove();
+    options_array[i].remove(); //remove all options from menu, start with a blank canvas
   }
 
   const design = document.getElementById('design');
@@ -50,20 +52,24 @@ function hide_t_shirt_info() {
 
 function show_t_shirt_info(e) {
   let colors = document.getElementById('colors-js-puns');
-  colors.hidden = false;
+  colors.hidden = false; //unhide colors menu
 
   const options_design = design.getElementsByTagName('option');
-  options_design[0].disabled = true;
+  options_design[0].disabled = true; //disable Select Theme option
 
   const tshirt = document.getElementById('color');
   const options = tshirt.getElementsByTagName('option');
 
+  //if state is blank, initialize state
   if (tshirt_design_state === '') tshirt_design_state = e.target.value;
 
+  //if state is not target value, then the selection has changed reset the menu
   if (tshirt_design_state !== e.target.value) hide_t_shirt_info();
 
+  //set state to current value
   tshirt_design_state = e.target.value;
 
+  //readd all options from options_array for 'js puns'
   for (let i = 0; i < options_array.length; i++) {
     if (e.target.value === 'js puns') {
       if (options_array[i].value === 'cornflowerblue')
@@ -73,10 +79,11 @@ function show_t_shirt_info(e) {
       if (options_array[i].value === 'gold') tshirt.add(options_array[i]);
     }
 
+    //readd all options from options_array for 'heart js'
     if (e.target.value === 'heart js') {
       if (options_array[i].value === 'tomato') tshirt.add(options_array[i]);
       if (options_array[i].value === 'steelblue') tshirt.add(options_array[i]);
-      if (options_array[i].value === 'dimgrey') tshirt.add(options_array[i]);
+      if (options_array[i].value === 'dimgrey') shirt.add(options_array[i]);
     }
   }
 }
@@ -84,12 +91,13 @@ function show_t_shirt_info(e) {
 function setup_checkboxes() {
   const activities = document.getElementsByClassName('activities')[0];
   const checkboxes = activities.getElementsByTagName('input');
-
+  //add event listener to each checkbox
   for (let i = 0; i < checkboxes.length; i++) {
     checkboxes[i].addEventListener('change', respond_to_checkbox_events);
   }
 }
 
+//map all activities to an index value based in their date and time
 const date_and_time_object = {
   all: 0,
   'js-frameworks': 1,
@@ -100,37 +108,44 @@ const date_and_time_object = {
   npm: 4
 };
 
+//keep track of checkbox state, used to disable checkboxed for conflicts in activities date and time
+//also used for form validation
 const date_and_time_array = [false, false, false, false, false];
 
 function respond_to_checkbox_events(e) {
+  let cost = 0;
+
   const activities = document.getElementsByClassName('activities')[0];
   const checkboxes = activities.getElementsByTagName('input');
-
+  //get checkbox state, and save it
   date_and_time_array[date_and_time_object[e.target.name]] = e.target.checked;
 
+  //remove 'cost' display if it already exists
   let cost_display = activities.getElementsByTagName('h1')[0];
   if (cost_display !== undefined) activities.removeChild(cost_display);
-  cost = 0;
 
   for (let i = 0; i < checkboxes.length; i++) {
+    //disable checkbox if not checked, and conflicted
     if (!checkboxes[i].checked)
       checkboxes[i].disabled =
         date_and_time_array[date_and_time_object[checkboxes[i].name]];
-
+    //get cost of activity, add it to total
     if (checkboxes[i].checked)
       cost += parseInt(checkboxes[i].getAttribute('data-cost'));
   }
 
+  //add 'cost' display to page if cost > 0
   if (cost > 0) {
     let cost_display = document.createElement('h1');
     cost_display.innerText = 'Total: $' + cost;
-
     activities.appendChild(cost_display);
   }
 
+  //reset 'Must Register for Activities!' error if at least one checkbox is checked
   validate_checkboxes(false);
 }
 
+//hide payment methods, credit card is default
 function hide_payment_info() {
   const payment = document.getElementById('payment');
   payment.addEventListener('change', show_payment_info);
@@ -145,6 +160,7 @@ function hide_payment_info() {
   bitcoin.hidden = true;
 }
 
+//show selected payment method
 function show_payment_info(e) {
   const credit_card = document.getElementById('credit-card');
   credit_card.hidden = true;
@@ -162,20 +178,17 @@ function show_payment_info(e) {
   if (e.target.value === 'bitcoin') bitcoin.hidden = false;
 }
 
+//validate form using onsubmit
 function validate_form() {
   let is_valid = true;
-
   if (validate_name() === false) is_valid = false;
-
   if (validate_email() === false) is_valid = false;
-
   if (validate_checkboxes(true) === false) is_valid = false;
-
   if (validate_credit_card() === false) is_valid = false;
-
   return is_valid;
 }
 
+//used to display error text in labels
 function display_text_in_label(text, color, id) {
   let label = document.getElementsByTagName('label')[id];
   if (id === 2) label = document.getElementsByTagName('legend')[id];
@@ -183,11 +196,13 @@ function display_text_in_label(text, color, id) {
   label.style.color = color;
 }
 
+//add event listener to the name field, so it can be validated in real-time
 document.getElementById('name').addEventListener('keyup', validate_name);
 
 function validate_name() {
   const name = document.getElementById('name');
 
+  //make sure text was given and not just spaces
   if (name.value.length === 0 || !/[^\s]+/.test(name.value)) {
     display_text_in_label('Name has not been provided!', 'red', 0);
     name.style.borderColor = 'red';
@@ -199,6 +214,7 @@ function validate_name() {
     name.style.color = 'black';
   }
 
+  //make sure name does not contain numbers
   if (!/^[^\d]+$/.test(name.value)) {
     display_text_in_label('Name can not contain numbers!', 'red', 0);
     name.style.borderColor = 'red';
@@ -210,7 +226,8 @@ function validate_name() {
     name.style.color = 'black';
   }
 
-  if (!/^[^@#!$%\^&*/\\?()\[\]+-]+$/.test(name.value)) {
+  //make sure name does not contain extra symbols
+  if (!/^[^@#!$%\^&*/\\?()\[\]+\-]+$/.test(name.value)) {
     display_text_in_label('Name can not contain: @#!$%^&*!?()[]+-', 'red', 0);
     name.style.borderColor = 'red';
     name.style.color = 'red';
@@ -224,11 +241,13 @@ function validate_name() {
   return true;
 }
 
+//add event listener to the email field, so it can be validated in real-time
 document.getElementById('mail').addEventListener('keyup', validate_email);
 
 function validate_email() {
   const email = document.getElementById('mail');
 
+  //make sure text was given and not just spaces
   if (email.value.length === 0 || !/[^\s]+/.test(email.value)) {
     display_text_in_label('Email has not been provided!', 'red', 1);
     email.style.borderColor = 'red';
@@ -240,6 +259,7 @@ function validate_email() {
     email.style.color = 'black';
   }
 
+  //make sure email is valid, is of the form: 'emailaddress@example.com'
   if (!/^[^@]+@[^@.]+\.[a-z]+$/i.test(email.value)) {
     display_text_in_label(
       'Email is not valid! Make sure the email is in the form of "emailaddress@example.com".',
@@ -269,28 +289,28 @@ function validate_checkboxes(show_error) {
     return false;
   }
 }
-
+//add event listener to the card number field, so it can be validated in real-time
 document
   .getElementById('cc-num')
   .addEventListener('keyup', validate_credit_card_number);
+//add event listener to the zip code field, so it can be validated in real-time
 document.getElementById('zip').addEventListener('keyup', validate_zip_code);
+//add event listener to the cvv field, so it can be validated in real-time
 document.getElementById('cvv').addEventListener('keyup', validate_ccv);
 
+//used by validate_form
 function validate_credit_card() {
   let is_valid = true;
-
   if (validate_credit_card_number() === false) is_valid = false;
-
   if (validate_zip_code() === false) is_valid = false;
-
   if (validate_ccv() === false) is_valid = false;
-
   return is_valid;
 }
 
 function validate_credit_card_number() {
+  
+  //only validate if credit card is selected as payment
   const credit_card = document.getElementById('credit-card');
-
   if (credit_card.hidden) return true;
 
   const cc_num = document.getElementById('cc-num');
@@ -325,8 +345,9 @@ function validate_credit_card_number() {
 }
 
 function validate_zip_code() {
-  const credit_card = document.getElementById('credit-card');
 
+  //only validate if credit card is selected as payment
+  const credit_card = document.getElementById('credit-card');
   if (credit_card.hidden) return true;
 
   const zip = document.getElementById('zip');
@@ -357,8 +378,9 @@ function validate_zip_code() {
 }
 
 function validate_ccv() {
-  const credit_card = document.getElementById('credit-card');
 
+  //only validate if credit card is selected as payment
+  const credit_card = document.getElementById('credit-card');
   if (credit_card.hidden) return true;
 
   const cvv = document.getElementById('cvv');
