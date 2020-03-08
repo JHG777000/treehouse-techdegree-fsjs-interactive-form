@@ -189,7 +189,9 @@ function show_payment_info(e) {
  function validate_form() {
     let is_valid = true;
 
-    is_valid = validate_name();
+    if (validate_name() === false) is_valid = false;
+
+    if (validate_email() === false) is_valid = false;
 
     return is_valid;
  }
@@ -200,22 +202,65 @@ function show_payment_info(e) {
     label.style.color = color;
  }
 
- const name = document.getElementById('name')
-  .addEventListener('keyup',validate_name);
+  document.getElementById('name').addEventListener('keyup',validate_name);
 
  function validate_name() {
-    let is_valid = true;
 
     const name = document.getElementById('name');
 
-     if (name.value.length === 0 || !/[a-zA-Z\d]+/.test(name.value)) {
+     if (name.value.length === 0 || !/[^\s]+/.test(name.value)) {
         display_text_in_label('Name has not been provided!','red',0);
         name.style.color = 'red';
-        is_valid = false;
+        return false;
      } else {
         display_text_in_label('Name:','black',0);
         name.style.color = 'black';
      }
 
-    return is_valid; 
+     if (!/^[^\d]+$/.test(name.value)) {
+        display_text_in_label('Name can not contain numbers!','red',0);
+        name.style.color = 'red';
+        return false;
+     } else {
+        display_text_in_label('Name:','black',0);
+        name.style.color = 'black';
+     }
+
+     if (!/^[^@#!$%\^&*/\\?()\[\]+-]+$/.test(name.value)) {
+        display_text_in_label('Name can not contain: @#!$%^&*!?()[]+-','red',0);
+        name.style.color = 'red';
+        return false;
+     } else {
+        display_text_in_label('Name:','black',0);
+        name.style.color = 'black';
+     }
+
+
+    return true; 
+ }
+
+ document.getElementById('mail').addEventListener('keyup',validate_email);
+
+ function validate_email() {
+
+    const email = document.getElementById('mail');
+
+    if (email.value.length === 0 || !/[^\s]+/.test(email.value)) {
+        display_text_in_label('Email has not been provided!','red',1);
+        email.style.color = 'red';
+        return false;
+     } else {
+        display_text_in_label('Email:','black',1);
+        email.style.color = 'black';
+     }
+
+     if (!/^[^@]+@[^@.]+\.[a-z]+$/i.test(email.value)) {
+        display_text_in_label('Email is not valid! Make sure the email is in the form of "emailaddress@example.com".','red',1);
+        email.style.color = 'red';
+        return false;
+     } else {
+        display_text_in_label('Email:','black',1);
+        email.style.color = 'black';
+     }
+     return true; 
  }
