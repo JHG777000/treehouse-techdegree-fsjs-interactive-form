@@ -180,7 +180,9 @@ function show_payment_info(e) {
   if (e.target.value === 'bitcoin') bitcoin.hidden = false;
 }
 
-document.getElementsByTagName('button')[0].addEventListener('mouseover',reset_errors);
+document
+  .getElementsByTagName('button')[0]
+  .addEventListener('mouseover', reset_errors);
 
 let document_is_valid = true;
 
@@ -200,16 +202,17 @@ function validate_form() {
 
   if (!is_valid) {
     let button = document.getElementsByTagName('button')[0];
-     button.innerText = 'To Register, please scroll up and fill out all needed fields.';
-     button.style.borderColor = 'red';
-     button.style.color = 'red';
+    button.innerText =
+      'To Register, please scroll up and fill out all needed fields.';
+    button.style.borderColor = 'red';
+    button.style.color = 'red';
   }
 
   if (is_valid) {
     let button = document.getElementsByTagName('button')[0];
-     button.innerText = 'Register'; 
-     button.style.borderColor = '';
-     button.style.color = '';
+    button.innerText = 'Register';
+    button.style.borderColor = '';
+    button.style.color = '';
   }
 
   return is_valid;
@@ -335,7 +338,6 @@ function validate_credit_card() {
 }
 
 function validate_credit_card_number() {
-  
   //only validate if credit card is selected as payment
   const credit_card = document.getElementById('credit-card');
   if (credit_card.hidden) return true;
@@ -372,7 +374,6 @@ function validate_credit_card_number() {
 }
 
 function validate_zip_code() {
-
   //only validate if credit card is selected as payment
   const credit_card = document.getElementById('credit-card');
   if (credit_card.hidden) return true;
@@ -405,7 +406,6 @@ function validate_zip_code() {
 }
 
 function validate_ccv() {
-
   //only validate if credit card is selected as payment
   const credit_card = document.getElementById('credit-card');
   if (credit_card.hidden) return true;
