@@ -153,6 +153,8 @@ function hide_payment_info() {
   const select_method = payment.getElementsByTagName('option')[0];
   select_method.disabled = true;
 
+  payment.selectedIndex = 1;
+
   const paypal = document.getElementById('paypal');
   paypal.hidden = true;
 
@@ -178,6 +180,14 @@ function show_payment_info(e) {
   if (e.target.value === 'bitcoin') bitcoin.hidden = false;
 }
 
+document.getElementsByTagName('button')[0].addEventListener('mouseover',reset_errors);
+
+let document_is_valid = true;
+
+function reset_errors() {
+  if (!document_is_valid) validate_form();
+}
+
 //validate form using onsubmit
 function validate_form() {
   let is_valid = true;
@@ -185,6 +195,23 @@ function validate_form() {
   if (validate_email() === false) is_valid = false;
   if (validate_checkboxes(true) === false) is_valid = false;
   if (validate_credit_card() === false) is_valid = false;
+
+  document_is_valid = is_valid;
+
+  if (!is_valid) {
+    let button = document.getElementsByTagName('button')[0];
+     button.innerText = 'To Register, please scroll up and fill out all needed fields.';
+     button.style.borderColor = 'red';
+     button.style.color = 'red';
+  }
+
+  if (is_valid) {
+    let button = document.getElementsByTagName('button')[0];
+     button.innerText = 'Register'; 
+     button.style.borderColor = '';
+     button.style.color = '';
+  }
+
   return is_valid;
 }
 
