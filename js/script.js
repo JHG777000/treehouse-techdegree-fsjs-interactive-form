@@ -55,7 +55,7 @@ function show_t_shirt_info(e) {
   colors.hidden = false; //unhide colors menu
 
   const options_design = design.getElementsByTagName('option');
-  options_design[0].disabled = true; //disable Select Theme option
+  if (options_design[0].value === 'Select Theme') options_design[0].remove(); //remove Select Theme option
 
   const tshirt = document.getElementById('color');
   const options = tshirt.getElementsByTagName('option');
@@ -83,7 +83,7 @@ function show_t_shirt_info(e) {
     if (e.target.value === 'heart js') {
       if (options_array[i].value === 'tomato') tshirt.add(options_array[i]);
       if (options_array[i].value === 'steelblue') tshirt.add(options_array[i]);
-      if (options_array[i].value === 'dimgrey') shirt.add(options_array[i]);
+      if (options_array[i].value === 'dimgrey') tshirt.add(options_array[i]);
     }
   }
 }
