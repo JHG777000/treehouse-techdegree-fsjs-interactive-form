@@ -1,4 +1,4 @@
-# treehouse-techdegree-fsjs-project-3
+# treehouse-techdegree-fsjs-interactive-form
 
 Interactive form for a fake 'Full Stack Conf'.
 
